@@ -1,0 +1,49 @@
+************Here's the algorithm to find the index of a target element in a rotated sorted array with O(log n) runtime complexity:******************
+
+1.Initialize two pointers, left and right, pointing to the start and end of the array, respectively.
+2.Perform a binary search by iterating until left is less than or equal to right.
+3.Calculate the middle index as mid = (left + right) / 2.
+4.Check if the element at the middle index is equal to the target:
+	If it is, return the middle index.
+5.Determine if the left half of the array is sorted or the right half is sorted by comparing the middle element with the left and right elements:
+	(i).If nums[left] <= nums[mid], the left half is sorted.
+	(ii).If nums[mid] <= nums[right], the right half is sorted.
+6.If the left half is sorted, check if the target falls within the range of the left half:
+	(i).If nums[left] <= target < nums[mid], update right = mid - 1 to search in the left half.
+	(ii).Otherwise, update left = mid + 1 to search in the right half.
+7.If the right half is sorted, check if the target falls within the range of the right half:
+	(i).If nums[mid] < target <= nums[right], update left = mid + 1 to search in the right half.
+	(ii).Otherwise, update right = mid - 1 to search in the left half.
+8.If the target is not found in the current iteration, continue with the next iteration until left is no longer less than or equal to right.
+9.If the target is not found in the array, return -1.
+
+***************Here is the algorith in pseudocode:*********************
+
+function search(nums, target):
+    n = length(nums)
+    if n == 0:
+        return -1
+    
+    # find pivot index using binary search
+    left, right = 0, n-1
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] > nums[right]:
+            left = mid + 1
+        else:
+            right = mid
+    
+    # binary search for target
+    pivot = left
+    left, right = 0, n-1
+    while left <= right:
+        mid = (left + right) // 2
+        realmid = (mid + pivot) % n
+        if nums[realmid] == target:
+            return realmid
+        elif nums[realmid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    
+    return -1
